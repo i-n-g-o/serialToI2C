@@ -7,9 +7,9 @@
 			"revision" : 9
 		}
 ,
-		"rect" : [ 272.0, 178.0, 1307.0, 846.0 ],
+		"rect" : [ 63.0, 141.0, 1307.0, 846.0 ],
 		"bglocked" : 0,
-		"defrect" : [ 272.0, 178.0, 1307.0, 846.0 ],
+		"defrect" : [ 63.0, 141.0, 1307.0, 846.0 ],
 		"openrect" : [ 0.0, 0.0, 0.0, 0.0 ],
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -25,6 +25,34 @@
 		"enablevscroll" : 1,
 		"devicewidth" : 0.0,
 		"boxes" : [ 			{
+				"box" : 				{
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"id" : "obj-4",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 2,
+					"outlettype" : [ "", "" ],
+					"patching_rect" : [ 658.0, 726.0, 32.5, 20.0 ],
+					"text" : "t l l"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"color" : [ 0.945098, 0.913725, 0.407843, 1.0 ],
+					"fontname" : "Arial",
+					"fontsize" : 12.0,
+					"id" : "obj-3",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 658.0, 812.0, 105.0, 20.0 ],
+					"text" : "print i2c_info_raw"
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"fontname" : "Arial",
 					"fontsize" : 12.0,
@@ -470,13 +498,13 @@
 ,
 					"patching_rect" : [ 971.0, 54.0, 132.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"fontsize" : 12.0,
-						"default_fontface" : 0,
 						"default_fontname" : "Arial",
-						"default_fontsize" : 12.0,
 						"fontname" : "Arial",
+						"default_fontsize" : 12.0,
+						"fontface" : 0,
 						"globalpatchername" : "",
-						"fontface" : 0
+						"fontsize" : 12.0,
+						"default_fontface" : 0
 					}
 ,
 					"text" : "p SerialToI2C_protocol"
@@ -687,13 +715,13 @@
 ,
 					"patching_rect" : [ 971.0, 130.0, 174.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"fontsize" : 12.0,
-						"default_fontface" : 0,
 						"default_fontname" : "Arial",
-						"default_fontsize" : 12.0,
 						"fontname" : "Arial",
+						"default_fontsize" : 12.0,
+						"fontface" : 0,
 						"globalpatchername" : "",
-						"fontface" : 0
+						"fontsize" : 12.0,
+						"default_fontface" : 0
 					}
 ,
 					"text" : "p customI2CProtocol_example"
@@ -756,9 +784,9 @@
 							"revision" : 9
 						}
 ,
-						"rect" : [ 201.0, 87.0, 709.0, 654.0 ],
+						"rect" : [ 368.0, 44.0, 709.0, 654.0 ],
 						"bglocked" : 0,
-						"defrect" : [ 201.0, 87.0, 709.0, 654.0 ],
+						"defrect" : [ 368.0, 44.0, 709.0, 654.0 ],
 						"openrect" : [ 0.0, 0.0, 0.0, 0.0 ],
 						"openinpresentation" : 0,
 						"default_fontsize" : 12.0,
@@ -1240,13 +1268,13 @@
 ,
 					"patching_rect" : [ 971.0, 102.0, 117.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"fontsize" : 12.0,
-						"default_fontface" : 0,
 						"default_fontname" : "Arial",
-						"default_fontsize" : 12.0,
 						"fontname" : "Arial",
+						"default_fontsize" : 12.0,
+						"fontface" : 0,
 						"globalpatchername" : "",
-						"fontface" : 0
+						"fontsize" : 12.0,
+						"default_fontface" : 0
 					}
 ,
 					"text" : "p control_MCP4725"
@@ -1331,7 +1359,7 @@
 					"numinlets" : 3,
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
-					"patching_rect" : [ 658.0, 608.0, 46.0, 20.0 ],
+					"patching_rect" : [ 672.0, 755.0, 46.0, 20.0 ],
 					"text" : "itoa"
 				}
 
@@ -1345,7 +1373,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 658.0, 635.0, 79.0, 20.0 ],
+					"patching_rect" : [ 672.0, 782.0, 79.0, 20.0 ],
 					"text" : "print i2c_info"
 				}
 
@@ -2113,13 +2141,13 @@
 ,
 					"patching_rect" : [ 191.0, 472.0, 144.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"fontsize" : 12.0,
-						"default_fontface" : 0,
 						"default_fontname" : "Arial",
-						"default_fontsize" : 12.0,
 						"fontname" : "Arial",
+						"default_fontsize" : 12.0,
+						"fontface" : 0,
 						"globalpatchername" : "",
-						"fontface" : 0
+						"fontsize" : 12.0,
+						"default_fontface" : 0
 					}
 ,
 					"text" : "p int-command-converter"
@@ -2198,7 +2226,7 @@
 									"numinlets" : 1,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 50.0, 444.0, 84.0, 20.0 ],
+									"patching_rect" : [ 50.0, 483.0, 84.0, 20.0 ],
 									"text" : "append 13 10"
 								}
 
@@ -2652,13 +2680,13 @@
 ,
 					"patching_rect" : [ 344.0, 472.0, 144.0, 20.0 ],
 					"saved_object_attributes" : 					{
-						"fontsize" : 12.0,
-						"default_fontface" : 0,
 						"default_fontname" : "Arial",
-						"default_fontsize" : 12.0,
 						"fontname" : "Arial",
+						"default_fontsize" : 12.0,
+						"fontface" : 0,
 						"globalpatchername" : "",
-						"fontface" : 0
+						"fontsize" : 12.0,
+						"default_fontface" : 0
 					}
 ,
 					"text" : "p command-int-converter"
@@ -2881,7 +2909,7 @@
 					"fontname" : "Arial",
 					"fontsize" : 12.0,
 					"id" : "obj-44",
-					"items" : [ "Bluetooth-Incoming-Port", ",", "Bluetooth-Modem", ",", "FireFly-A5E5-SPP", ",", "usbmodem1a12421" ],
+					"items" : [ "Bluetooth-Incoming-Port", ",", "Bluetooth-Modem", ",", "FireFly-A5E5-SPP", ",", "usbmodem1a12411" ],
 					"maxclass" : "umenu",
 					"numinlets" : 1,
 					"numoutlets" : 3,
@@ -3340,6 +3368,24 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-2", 0 ],
+					"hidden" : 0,
+					"midpoints" : [  ],
+					"source" : [ "obj-4", 1 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-3", 0 ],
+					"hidden" : 0,
+					"midpoints" : [  ],
+					"source" : [ "obj-4", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-118", 0 ],
 					"hidden" : 0,
 					"midpoints" : [  ],
@@ -3727,7 +3773,7 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-2", 0 ],
+					"destination" : [ "obj-4", 0 ],
 					"hidden" : 0,
 					"midpoints" : [  ],
 					"source" : [ "obj-99", 9 ]

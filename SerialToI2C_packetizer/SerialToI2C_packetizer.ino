@@ -8,6 +8,7 @@
 
 #include <Wire.h>
 
+#include "Packetizer.h"
 #include "SerialToI2C.h"
 
 
@@ -38,23 +39,11 @@ uint8_t resetPin = 4; // pin connected to reset line
 unsigned int resetTime = 10; // time to wait between reset signals in [ms]
 unsigned int resetSettleTime = 100; // time to wait for devices to settle after reset [ms]
 
+
 //------------------------------------
 // serial input buffer
-byte* inputBuffer;
 unsigned int inputBufferSize = 128;
-unsigned int bufferIdx = 0;
-
-//------------------------------------
-// message conditions
-
-// message start condition
-byte packetInStart[] = {}; // start condition
-byte packetInStartSize;
-boolean packetInStartFound = false;
-
-// message end condition
-byte packetInEnd[] = {13, 10}; // end condition (breaker)
-byte packetInEndSize;
+Packetizer slicer(inputBufferSize);
 
 // output start / end condition
 byte packetOutStart[] = {};
@@ -67,19 +56,16 @@ byte packetOutEnd[] = {13, 10};
 void setup()
 {
   //----------------------------------------
-  // get default packet condition sizes
-  packetInStartSize = sizeof(packetInStart);
-  packetInEndSize = sizeof(packetInEnd);
+  // setup slicer
+  char b[] = {13, 10};
+  slicer.setEndCondition(b, sizeof(b));
+
+  // set callbacks
+  slicer.onPacketStart(myOnPacketStart);
+  slicer.onPacket(analyzePacket);
   
-  if (packetInStartSize == 0)
-  {
-    // in case there is no start condition
-    packetInStartFound = true;
-  }
-  
-  // create input buffer with default size
-  inputBuffer = (byte*)malloc(inputBufferSize);
-  resetInputBuffer();
+  // optional: set a callback for buffer-overflow
+  slicer.onOverflow(myOnOverflow);
   
   
   //----------------------------------------
@@ -88,8 +74,7 @@ void setup()
 
   // wait a bit, in case i2c slaves needs to settle
   delay(resetSettleTime);
-  
-  
+
   //----------------------------------------
   // init Wire library
   Wire.begin();
@@ -109,125 +94,43 @@ void setup()
 //------------------------------------
 void loop()
 {
-  //---------------------------------------------------------
-  // read from serial  
-  int incomingByte;
-
-  while (Serial.available() > 0)
-  {
-    // read data
-    incomingByte = Serial.read();
-
-    // test if valid
-    if (incomingByte < 0) break;
-
-
-    // test on index
-    if (bufferIdx >= inputBufferSize)
-    {
-      resetInputBuffer();
-    }
-
-    // add incoming byte to input buffer
-    inputBuffer[bufferIdx] = (byte)incomingByte;
-    // increement buffer index, this indicates the length
-    bufferIdx++;
-
-    // check for start and end condition
-    // only, if there is enough bytes in buffer
-    if (bufferIdx >= (packetInStartSize + packetInEndSize))
-    {
-      //
-      boolean bPacketTest = true;
-      byte i;
-      
-      //------------------------------------
-      // test for start condition
-      if (packetInStartSize > 0 &&
-          !packetInStartFound)
-      {
-        // search for start condition on current location
-        for (i = 1; i <= packetInStartSize; i++)
-        {
-          if (inputBuffer[bufferIdx - i] != packetInStart[packetInStartSize - i])
-          {
-            bPacketTest = false;
-            break;
-          }
-        }
-        
-        if (!bPacketTest)
-        {
-          // no start condition
-          // continue receiving bytes...
-          continue;
-        }
-        
-        packetInStartFound = true;
-      }
-      
-      
-      //------------------------------------
-      // test for end condition
-      // only if start was found
-      if (packetInStartFound)
-      {        
-        // reset packet test
-        bPacketTest = true;
-        for (i = 1; i <= packetInEndSize; i++)
-        {
-          if (inputBuffer[bufferIdx - i] != packetInEnd[packetInEndSize - i])
-          {
-            bPacketTest = false;
-            break;
-          }
-        }
-        
-        
-        if (bPacketTest)
-        {
-          // we got full packet, get real size of message
-          int messageLength = bufferIdx - packetInEndSize - packetInStartSize;
-          
-          if (messageLength > 0)
-          {
-            // analyze packet, strip start and end
-            analyzePacket(inputBuffer+packetInStartSize, messageLength);
-          }
-          
-          // doen with messahe, wipe input buffer
-          resetInputBuffer();
-          
-          continue;
-        }
-      } // if packetInStartFound
-    }
-  }
-
-  // wait a bit
-  delay(5);
-
 }
 
 
-void resetInputBuffer()
+
+//----------------------------------------
+// catch serial events
+//----------------------------------------
+void serialEvent() {
+  while (Serial.available()) {
+    // get the new byte:
+    char inChar = (char)Serial.read(); 
+    
+    // append data to slicer
+    slicer.appendData(inChar);
+  }
+}
+
+
+//----------------------------------------
+// callback when start condition was found
+//----------------------------------------
+void myOnPacketStart()
 {
-  // wipe input buffer and reset index
-  memset(inputBuffer, 0, inputBufferSize);
-  bufferIdx = 0;
-  
-  if (packetInStartSize > 0)
-  {
-    packetInStartFound = false;
-  }
 }
 
-
+//----------------------------------------
+// callback for buffer-oberflow
+//----------------------------------------
+void myOnOverflow(char* _buffer, size_t _bufferSize)
+{
+  // handle overflowbuffer
+}
 
 //----------------------------------------------------------------------------
 // analyze a packet
 //----------------------------------------------------------------------------
-void analyzePacket(byte* buffer_in, int messageLength)
+void analyzePacket(char* buffer_in, size_t messageLength)
 {
   // safety
   if (buffer_in == 0 || messageLength <= 0) return;
@@ -317,10 +220,7 @@ void analyzePacket(byte* buffer_in, int messageLength)
     // set input buffer size
     inputBufferSize = buffer_in[1];
     
-    free(inputBuffer);    
-    // create input buffer with new size
-    inputBuffer = (byte*)malloc(inputBufferSize);
-    resetInputBuffer();
+    slicer.init(inputBufferSize);
   
     break;
     
@@ -699,5 +599,4 @@ void resetDevices()
   digitalWrite(resetPin, HIGH);
   delay(resetSettleTime);
 }
-
 
